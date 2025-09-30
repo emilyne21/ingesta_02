@@ -1,5 +1,10 @@
-FROM python:3-slim
+FROM python:3.11-slim
 WORKDIR /programas/ingesta
-RUN pip3 install boto3
-COPY . .
-CMD [ "python3", "./ingesta.py" ]
+
+# Dependencias necesarias para: MySQL -> CSV -> S3
+RUN pip install --no-cache-dir boto3 mysql-connector-python
+
+# Solo copiamos el script (evita arrastrar archivos innecesarios)
+COPY ingesta.py .
+
+CMD ["python", "ingesta.py"]
